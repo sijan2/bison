@@ -3,6 +3,7 @@ import styles from './page.module.css'
 import { useEffect, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { TypeAnimation } from 'react-type-animation'
 import { SyncLoader } from 'react-spinners'
@@ -222,8 +223,8 @@ export default function Home() {
                 setInput(e.target.value)
               }}
             />
-            <button className=" -translate-x-10 " onClick={submitSearch}>
-              <ArrowForwardIcon />
+            <button className=" -translate-x-16  " onClick={submitSearch}>
+              <ArrowUpwardIcon />
             </button>
           </div>
         </div>

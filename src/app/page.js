@@ -17,152 +17,80 @@ export default function Home() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
 
-  //prompt fed to GPT in the beginning
-  const systemPrompt = {
-    role: 'system',
-    content:
-      "You are a factual, conversational chatbot for Georgetown University. The provided data is ONLY to be used if you don't have a specific answer.  NEVER SAY that you don't know or the requested information is not in the documents.  Again, this is only to be used if you don't have a specific answer. Also maintain a supportive tone to inform and support the high schooler users.",
-  }
-
-  //FAQs to be displayed when the user first opens the app
+  // FAQ prompts
   const [faqs, setFaqs] = useState([
     'Do International Students need to submit SAT scores?',
-
     'What is the application deadline for 2024?',
   ])
 
-  //enter key to submit search
+  // Handle keydown for submitting search on Enter
   const handleKeyDown = (event) => {
-    if (event.keyCode === 13 && loading == false) {
+    if (event.keyCode === 13 && !loading) {
       submitSearch()
     }
   }
 
   useEventListener('keydown', handleKeyDown)
 
-  //API key for Azure Search & Azure OpenAI
-  const api_key = 'b6f9c0cfbd2c493f86743dfb6d1e3da4'
-  const search_url = 'https://team20.search.windows.net'
-  const search_key = '34NGtYQVlBK2m47yXobE4JMugTC7hMqVwKPjbvQIhWAzSeBGQuHm'
-
-  //moves current chat to recent chats and clears current chat
+  // Function to handle starting a new chat
   const newChatFunction = () => {
-    setRecentChats((recentChats) => [...recentChats, currentChat])
+    setRecentChats([...recentChats, currentChat])
     setCurrentChat([])
   }
 
+  // Function to populate current chat with a chat from history
   const populateCurrentChat = (index) => {
     setCurrentChat(recentChats[index])
   }
 
-  //main submit search function
+  // Main submit search function updated to use Flask API
   const submitSearch = async () => {
-    if (input == '') return
+    if (input === '') return
 
-    //adds the spinner to the chat
     setLoading(true)
 
-    //output the currentchat array
-
-    //take the current input to query Azure Search
-
-    //REST API call to Azure Search
     const payload = {
-      dataSources: [
-        {
-          type: 'AzureCognitiveSearch',
-          parameters: {
-            endpoint: search_url,
-            key: search_key,
-            indexName: 'cosmosdb-index',
-            inScope: false,
-            roleInformation:
-              "You are only to consult these documents if you don't have a specific answer.  NEVER SAY that you don't know or the requested information is not in the documents.  Again, this is only to be used if you don't have a specific answer.",
-            topNDocuments: 3,
-          },
-        },
-      ],
-      messages: [
-        systemPrompt,
-        ...currentChat,
-        { role: 'user', content: input },
-      ],
-      max_tokens: 600,
-      stop: null,
-      temperature: 1,
-      inScope: false,
+      current_chat: input,
+      history: recentChats,
     }
 
-    setCurrentChat((currentChat) => [
-      ...currentChat,
-      {
-        role: 'user',
-        content: input,
-      },
-    ])
-
+    setCurrentChat([...currentChat, { role: 'user', content: input }])
     setInput('')
 
-    //API call to Azure OpenAI
-    const res = await fetch(
-      'https://studio205859928605.openai.azure.com/openai/deployments/gpt-4/extensions/chat/completions?api-version=2023-08-01-preview',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'api-key': api_key,
-        },
-        body: JSON.stringify(payload),
+    try {
+      const response = await fetch(
+        'https://hucares-528eecef3292.herokuapp.com/api',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`)
       }
-    )
 
-    if (res.status != 200) {
-      //if the response is not 200, then we have an error
-      console.log('Error with Azure Search')
-      console.log(res)
-      setLoading(false)
+      const data = await response.json()
 
-      setCurrentChat((currentChat) => [
+      setCurrentChat([
+        ...currentChat,
+        { role: 'assistant', content: data.openai_response },
+      ])
+    } catch (error) {
+      console.error('API call failed:', error)
+      setCurrentChat([
         ...currentChat,
         {
           role: 'assistant',
           content: 'Sorry, there was an error. Please try again.',
         },
       ])
-      return
+    } finally {
+      setLoading(false)
     }
-
-    const data = await res.json()
-
-    console.log(data)
-
-    //get the response text from the first choice
-    let responseText = data.choices[0].message.content
-
-    //remove any substrings that are [doc1]
-    responseText = responseText.replace(/\[doc\d\]/g, '')
-
-    //parses the relevant links from the context
-    if (data.choices[0].message.context) {
-      responseText += '\n\n\n**Relevant Links**'
-      console.log('CONTEXT')
-      JSON.parse(
-        data.choices[0].message.context.messages[0].content
-      ).citations.forEach((citation) => {
-        responseText += '\n\n' + `[${citation.url}](` + citation.url + `)`
-      })
-    }
-
-    setCurrentChat((currentChat) => [
-      ...currentChat,
-      {
-        role: 'assistant',
-        content: responseText,
-      },
-    ])
-
-    console.log(currentChat)
-    setLoading(false)
   }
 
   return (
@@ -234,7 +162,8 @@ export default function Home() {
               </div>
             ))}
           </div>
-        ) : (
+        ) : null}
+        {currentChat.length > 0 && (
           <div className={styles.chatbubbles} id="chatbubbles">
             {currentChat.map((chat) => {
               if (chat.role == 'user') {

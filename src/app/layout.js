@@ -6,9 +6,8 @@ const font = Manrope({
 })
 
 export const metadata = {
-  title: 'Bison Helper',
-  description:
-    'A chatbot to help you find information about Georgetown University',
+  title: 'Bison Connect',
+  description: 'A chatbot to help you find information about Howard University',
   image: '/logo.png',
 }
 

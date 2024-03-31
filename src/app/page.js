@@ -9,6 +9,7 @@ import { SyncLoader } from 'react-spinners'
 import useEventListener from '@use-it/event-listener'
 import ReactMarkdown from 'react-markdown'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Home() {
   const [recentChats, setRecentChats] = useState([])
@@ -191,22 +192,26 @@ export default function Home() {
             ))}
           </div>
         </div>
-        <div className=" bottom-0 sticky items-center justify-between space-x-24 flex flex-row mt-auto p-8 text-3xl">
+        <div className=" bottom-0 sticky items-center justify-between space-x-40 flex flex-row mt-auto p-8 text-3xl">
           <div>
-            <Image
-              src="/discord.png"
-              alt="Discord Image"
-              width={50}
-              height={50}
-            />
+            <Link href="https://discord.gg/9K79b8B3Y7">
+              <Image
+                src="/discord.png"
+                alt="Discord Image"
+                width={50}
+                height={50}
+              />
+            </Link>
           </div>
           <div>
-            <Image
-              src="/groupme.png"
-              alt="Group Me Image"
-              width={50}
-              height={50}
-            />
+            <Link href="https://groupme.com/join_group/86671176/dyJFyIMO">
+              <Image
+                src="/groupme.png"
+                alt="Group Me Image"
+                width={50}
+                height={50}
+              />
+            </Link>
           </div>
         </div>
       </div>

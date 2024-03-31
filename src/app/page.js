@@ -167,9 +167,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.left}>
-        <div className="flex p-8 text-3xl flex-row items-center justify-center">
-          Bison Connect
-        </div>
+        <div className="flex p-8 text-3xl">Bison Connect</div>
         <div className={styles.chats}>
           <button className={styles.newChat} onClick={newChatFunction}>
             <p>New Chat</p>
@@ -191,6 +189,24 @@ export default function Home() {
                 <KeyboardArrowRightIcon />
               </div>
             ))}
+          </div>
+        </div>
+        <div className=" bottom-0 sticky items-center justify-between space-x-24 flex flex-row mt-auto p-8 text-3xl">
+          <div>
+            <Image
+              src="/discord.png"
+              alt="Discord Image"
+              width={50}
+              height={50}
+            />
+          </div>
+          <div>
+            <Image
+              src="/groupme.png"
+              alt="Group Me Image"
+              width={50}
+              height={50}
+            />
           </div>
         </div>
       </div>
@@ -228,7 +244,7 @@ export default function Home() {
                   <div key={chat} className={styles.botchat}>
                     <div className={styles.botchattitle}>
                       <Image width={80} height={80} src="/logo.png" alt="1" />
-                      <h5>Jack the Bulldog</h5>
+                      <h5>Bison Buddy</h5>
                     </div>
                     <ReactMarkdown className={styles.markdown}>
                       {chat.content}

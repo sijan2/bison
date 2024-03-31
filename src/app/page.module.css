@@ -15,8 +15,12 @@
   color: white;
   min-width: 350px;
   background: rgba(42, 52, 66, 0.7);
+  position: relative;
 }
-
+.stickyDiv {
+  position: sticky;
+  bottom: 0;
+}
 .chats {
   width: 90%;
 

@@ -9,7 +9,6 @@ import { SyncLoader } from 'react-spinners'
 import useEventListener from '@use-it/event-listener'
 import ReactMarkdown from 'react-markdown'
 import Image from 'next/image'
-import NavBar from '@/components/NavBar'
 
 export default function Home() {
   const [recentChats, setRecentChats] = useState([])

@@ -90,6 +90,7 @@ export default function Home() {
       ])
     } finally {
       setLoading(false)
+      setInput('')
     }
   }
 
@@ -120,7 +121,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-        <div className=" bottom-0 sticky items-center justify-between space-x-40 flex flex-row mt-auto p-8 text-3xl">
+        <div className="bottom-0 sticky items-center justify-between space-x-40 flex flex-row mt-auto p-8 text-3xl">
           <div>
             <Link href="https://discord.gg/9K79b8B3Y7">
               <Image
@@ -194,7 +195,7 @@ export default function Home() {
           </div>
         )}
         {currentChat.length == 0 ? (
-          <div className=" w-[300px] h-[300px] translate-x-[480px] -translate-y-96  relative">
+          <div className=" w-[300px] h-[300px] top-0 left-96 absolute">
             <Image src="/logo.png" alt="My Image" fill />
             <p className="translate-y-48 translate-x-10 text-xl font-bold">
               <TypeAnimation

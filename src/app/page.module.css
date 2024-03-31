@@ -138,21 +138,21 @@
 .faq {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-gap: 20px;
-
-  width: 80%;
+  grid-gap: 30px;
   max-width: 700px;
   margin: 0 auto;
-
   border-radius: 5px;
-  @apply -translate-x-20 translate-y-96 mt-72;
+  position: absolute;
+  bottom: 0;
+  right: 25%;
+  @apply -translate-y-32;
 }
 
 .faqItem {
   background: rgba(2, 26, 63, 0.7);
   padding: 10px;
   position: relative;
-  @apply rounded-lg;
+  @apply rounded-xl;
 }
 
 .faqItem:hover {
